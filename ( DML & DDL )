@@ -40,9 +40,10 @@ create table order_products(
 --countries
    
 ALTER TABLE countries
-MODIFY name varchar(20) NOT NULL;
+ADD UNIQUE (name);
 ALTER TABLE countries
-ADD UNIQUE (continent_name);
+MODIFY  continent_name varchar(20) NOT NULL;
+
 
 --users
 
