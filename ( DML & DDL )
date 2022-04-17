@@ -1,0 +1,102 @@
+--1,2
+create database store;
+use store;
+create table countries(
+    code int primary key ,
+    name varchar(20) ,
+    continent_name varchar(20));
+    
+create table users (
+    id int primary key ,
+    full_name varchar(20),
+    email varchar(20),
+    gender char(1),
+    date_of_birth varchar(15) ,
+    created_at datetime,
+    country_code int, foreign key (country_code) references countries(code)
+);
+
+create table orders(
+    id int primary key ,
+    user_id int, foreign key (user_id) references users(id) ,
+    status varchar(6),
+   created_at datetime);
+
+create table order_products(
+    order_id int primary key ,
+    product_id int, foreign key (product_id) references products(id) ,
+    quantity int,
+   foreign key (order_id) references orders(id));
+   
+   create table products(
+    id int primary key ,
+   name varchar(10)  ,
+   price int,
+    status varchar(10),
+   created_at datetime);
+
+--3
+--constraints
+--countries
+   
+ALTER TABLE countries
+MODIFY name varchar(20) NOT NULL;
+ALTER TABLE countries
+ADD UNIQUE (continent_name);
+
+--users
+
+ALTER TABLE users
+ADD UNIQUE (email);
+ALTER TABLE users
+ADD CONSTRAINT gender CHECK (gender in('M','F'));
+
+--orders
+
+ALTER TABLE orders
+ADD CONSTRAINT status CHECK (status in('start','finish'));
+
+--order_products
+
+ALTER TABLE order_products
+ALTER quantity SET DEFAULT 0;
+
+--products
+
+ALTER TABLE products
+ALTER price SET DEFAULT 0;
+ALTER TABLE products
+MODIFY name varchar(10) NOT NULL;
+
+ALTER TABLE products
+ADD CONSTRAINT status CHECK (status in('valid','expired'));
+
+--Bouns
+
+alter table users modify column created_at datetime default current_timestamp ;
+alter table orders modify column created_at datetime default current_timestamp ;
+alter table products modify column created_at datetime default current_timestamp ;
+
+--DML
+
+INSERT INTO countries 
+VALUES (1, 'SA', 'Asia');
+
+INSERT INTO users 
+VALUES (1, 'Awatif Aldajani', 'atftf@hotmail.com','F','1995','2022-04-17 1:17:5',1);
+
+INSERT INTO orders 
+VALUES (1, 1, 'start','2022-04-17 1:17:5');
+
+INSERT INTO products 
+VALUES (1, 'bag', 2000,'valid','2022-04-17 1:17:5');
+INSERT INTO products 
+VALUES (2, 'cap', 3000,'valid','2022-04-17 1:17:5');
+
+INSERT INTO order_products 
+VALUES (1,1,5);
+
+
+UPDATE countries SET name = 'Africa' WHERE code = 1;
+Delete from products where id =2;
+
